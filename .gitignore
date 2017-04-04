@@ -15,7 +15,6 @@ eps/
 *.swp
 *target/
 *.ppm
-*.png
 *.bmp
 *.obj
 *.mtl

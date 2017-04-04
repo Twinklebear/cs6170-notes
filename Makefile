@@ -1,5 +1,6 @@
 PDF_LATEX=pdflatex -halt-on-error
 TEX_FILE=$(wildcard *.tex)
+FIGS=$(wildcard fig/*.png)
 OUTPUT_PDF=$(patsubst %.tex, %.pdf, $(TEX_FILE))
 
 # Figure out the right RM for win/unix
@@ -11,7 +12,7 @@ endif
 
 all: $(OUTPUT_PDF)
 
-%.pdf: %.tex
+%.pdf: %.tex $(FIGS)
 	$(PDF_LATEX) $<
 	$(PDF_LATEX) $<
 	$(PDF_LATEX) $<
