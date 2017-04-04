@@ -1,0 +1,33 @@
+\begin{document}
+
+Thursday 4/6 Quiz
+Given a 1 or 2 dimensional function, give reeb graph, contour tree or mapper
+
+Topics:
+Extended persistence
+Elevation function
+Protein Docking
+
+\subsection{Extended persistence}
+
+There is something not satisfactory about ordinary persistence. Consider a ``deformed torus'' with a height function $f$. Going from bottom to top, the sublevel sets $\mathbb{X}=f^{-1}(-\infty,a]$ are a bowl at the first local min, two bowls at the next local min, glued bowls at the saddle point, a bowl with a handle at the second saddle point (note the tunnel) and so on.
+
+We can pair the critical points $(b,c)$ on the basis of a component being born at $b$ and killed at $c$. Same for $(f,g)$. We can also pair the global minimum with the global maximum $(a,h)$. This is the first part of ``extended persistence'' and it captures an \emph{essential feature} of the space. We call $(a,h)$ an \emph{extended persistence pair}. Another essential feature would be the tunnel described by the pair of saddle points $(d,e)$.
+
+We can make a Reeb graph for this space. The smallest branches correspond to the ordinary pairs, and the remaining vertices can be associated with the extended persistence pairs.
+
+These features of a topological space can be useful in analyzing the interaction of proteins and other molecules since these interactions are dependent on the compatibility of their shapes. The non-essential pairs from the previous example give a sense of the size of that feature; for instance, the pair $(c,d)$ gives the size of the corresponding protrusion.
+
+We can also do ``persistence simplification''. For example, if we push the point $b$ up past $c$, we remove two critical points and the protrusion associated with it.
+
+This type of anaylsis can be made better by adding a separate height function in another direction. This gives us different critical points and new critical pairs which highlight the shape's features along that direcion.
+
+\subsection{Elevation function}
+
+An elevation function $E:\mathbb{X}\to\mathbb{R}$ for any point $x\in\mathbb{X}$ gives us $E(x)$, which is the persistence of $x$ when it becomes critical. In the previous examples the critical points appeared where the normal direction aligned with the height direction.
+
+In the first example (the deformed torus), the elevation function is defined by $E(f)=E(g)=|t_g-t_f|$, $E(a)=E(h)=|t_h-t_a|$, etc. If our height function is not Morse, there may be multiple critical points that can be paired with another critical point. This can happen if we sample directions on a shape to do this kind of analysis; a small perturbation can eliminate the ambiguity.
+
+The notion of elevation function is useful in protein analysis since if two proteins' shapes are compatible, then there is a direction in which the elevation value of its features should be similar where the proteins meet.
+
+\end{document}
