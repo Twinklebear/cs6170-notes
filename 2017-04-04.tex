@@ -150,12 +150,15 @@ the object, in its structure.
 
 We can pair critical points based on features being born at one, and killed at the next.
 For example, we can pair $(b,c)$ on the basis of a component being born at $b$ and killed at $c$. Same for $(f,g)$. We can also pair the global minimum with the global maximum $(a,h)$. This is the first part of ``extended persistence'' and it captures an \emph{essential feature} of the space. We call $(a,h)$ an \emph{extended persistence pair}. Another essential feature would be the tunnel described by the pair of saddle points $(d,e)$.
-We can make a Reeb graph for this space \cref{fig:reeb-graph}. The smallest branches correspond to the ordinary pairs, and the remaining vertices can be associated with the extended persistence pairs.
-
-These features of a topological space can be useful in analyzing the interaction of proteins and other molecules since these interactions are dependent on the compatibility of their shapes. The non-essential pairs from the previous example give a sense of the size of that feature; for instance, the pair $(c,d)$ gives the size of the corresponding protrusion by computing the difference in height between the points $|f(d) - f(c)|$.
-
+These pairs are features created but not destroyed during the sub-level set filtration, and
+correspond to essential features in the structure.
+In the Reeb graph for this space (\cref{fig:reeb-graph}), the smallest branches correspond to the ordinary pairs, and the remaining vertices can be associated with the extended persistence pairs.
 We can also do ``persistence simplification''. For example, if we push the point $b$ up to, or past $c$, we remove the two critical points, and the protrusion associated with it. This can also be done by bringing $c$ down
 to $b$ or moving them both up and down to some equal height \cref{fig:simplification}.
+
+These features of a topological space can be useful in analyzing the interaction of proteins and other molecules since these interactions are dependent on the compatibility of their shapes. The persistence pairs from the previous example give a sense of the size of that feature; for instance, the pair $(c,d)$ gives the size of the corresponding protrusion by computing the difference in height between the points $|f(d) - f(c)|$.
+By comparing the persistence of the differente features on each protein we wish to dock, we can determine
+the best docking orientation, or if they are incompatible.
 
 \begin{figure}
 	\centering
@@ -183,14 +186,15 @@ to $b$ or moving them both up and down to some equal height \cref{fig:simplifica
 	to remove the lower-persistence feature.}
 \end{figure}
 
-This type of anaylsis can be made better by adding a separate height function in another direction. This gives us different critical points and new critical pairs which highlight the shape's features along that direcion.
-
 \section{Elevation Function}
 
 An elevation function $E:\mathbb{X}\to\mathbb{R}$ for any point $x\in\mathbb{X}$ gives us $E(x)$, which is the persistence of $x$ when it becomes critical. In the previous examples the critical points appeared where the normal direction aligned with the height direction. As we change the height direction, the corresponding
 critical points will also change (\cref{fig:elevations}).
 
-In the first example (\cref{fig:torus-reeb}), the elevation function is defined by $E(f)=E(g)=|t_g-t_f|$, $E(a)=E(h)=|t_h-t_a|$, etc. If our height function is not Morse, there may be multiple critical points that can be paired with another critical point. This can happen if we sample directions on a shape to do this kind of analysis; a small perturbation can eliminate the ambiguity.
+In the first example (\cref{fig:torus-reeb}), the elevation function $f$ is defined by $E(f)=E(g)=|t_g-t_f|$, $E(a)=E(h)=|t_h-t_a|$, etc. If our height function is not Morse, there may be multiple critical points that can be paired with another critical point. This can happen if we sample directions on a shape to do this kind of analysis; a small perturbation can eliminate the ambiguity.
+As proteins can rotate and dock in different orientations we can use multiple elevation functions
+in different directions to determine if they are compatible in some orientation
+This gives us different critical points and new critical pairs which highlight the shape's features along that direcion.
 
 \begin{figure}
 	\centering
@@ -210,8 +214,6 @@ In the first example (\cref{fig:torus-reeb}), the elevation function is defined 
 	critical points change accordingly.}
 \end{figure}
 
-The notion of elevation function is useful in protein analysis since if two proteins' shapes are compatible, then there is a direction in which the elevation value of its features should be similar where the proteins can dock.
-
 \section{Application to Protein Docking}
 
 To determine if two proteins can dock we can determine if there's a matching cavity in one that
@@ -220,15 +222,16 @@ in two proteins we can examine their extended persistence along all directions. 
 require computing the persistence on all directions of a half-sphere (due to symmetry), which in the
 continuous case gives an infinite number of directions. In practice, the molecular surface
 is represented using an \emph{Alpha complex}, which is a tessellation created by the intersection
-of fixed size balls defined at each point.
+of fixed size balls defined at each point. The radii of these balls can be chosen to be the
+distance at which different molecular forces have effect.
 
-As a result of this discretization we have a finite number of directions to test, given by
-the normals of the triangles for which the critical point is a face. To find the correct normal
+As a result of this discretization we have a finite number of directions to test for each critical point, given by
+the normals of the triangles for which it is a face. To find the correct normal
 for the point we interpolate the normals of the different triangles, finding a patch on
 $\mathbb{S}^2$ (\cref{fig:normals-patch}). If the patches of two critical points overlap
 (\cref{fig:normals-patch-intersection})
 they could potentially pair with each other, and additional refinement may be needed
-to determine if they actually can pair.
+to determine if they can actually pair.
 
 \begin{figure}
 	\centering
@@ -249,8 +252,8 @@ to determine if they actually can pair.
 \end{figure}
 
 In the case of the elevation function on proteins, it is possible the function is not Morse,
-making the analysis more challenging. Further, as these degeneracies capture important
-structure about the protein shape which would be lost if perturbed they must be handled
+making the analysis more challenging. However, these degeneracies capture important
+information about the protein structure which would be lost if perturbed, and must be handled
 separately. The four possible degenerate cases are shown in \cref{fig:protein-legs}.
 
 \begin{figure}
@@ -258,7 +261,11 @@ separately. The four possible degenerate cases are shown in \cref{fig:protein-le
 	\includegraphics[width=\textwidth]{fig/protein-leg-cases}
 	\caption{\label{fig:protein-legs} The possible special cases for protein docking, where
 	critical points have equal elevation. From left to right are the one-, two-,
-	three- and four-legged cases~\cite{WABER05}.}
+	three- and four-legged cases~\cite{WABER05}. In the two-legged case the saddle $x$
+	projects on to the line between the two minima. In the three-legged case it projects
+	to the triangle formed by the three minima. In the four-legged case the line between
+	the two saddle points can be projected down and will intersect the line between the
+	two minima}
 \end{figure}
 
 \section*{References}
